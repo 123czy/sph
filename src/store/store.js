@@ -5,6 +5,11 @@ import getters from './getters';
 import mutations from './mutations';
 import actions from './actions';
 import a from './modules/a'
+import search from './modules/search';
+import detail from './modules/detail';
+import cart from './modules/cart';
+import user from './modules/user';
+Vue.use(Vuex);
  
 export default new Vuex.Store({
     state,
@@ -12,11 +17,10 @@ export default new Vuex.Store({
     mutations,
     actions,
     modules: {
-        a:{
-            state:{},
-            getters:{},
-            mutations:{},
-            actions:{} 
-        }
+       a,
+       search,
+       detail,
+       cart,
+       user
     }
 })

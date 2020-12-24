@@ -12,7 +12,21 @@ import router from "router/router"
 //引入mock环境
 import "mock/mock"
 
+import store from  'store/store'
+
+
+//注册总线
+Vue.prototype.$bus = new Vue()
+
+import "components/components"
+
+//引入全局的动画less文件
+import "common/css/transition.less"
+
+
+
 new Vue({
   render: h => h(App),
-  router
+  router,
+  store
 }).$mount('#app')

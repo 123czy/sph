@@ -13,7 +13,9 @@
           store:resolve('src/store'),
           http:resolve('src/http'),
           mock:resolve('src/mock'),
-          pages:resolve('src/pages')
+          pages:resolve('src/pages'),
+          common:resolve('src/common'),
+          util:resolve('src/util')
         }
         }
     },

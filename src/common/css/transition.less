@@ -1,0 +1,23 @@
+//此文件中的声明的优先级一定要最高
+//隐藏变为显示
+.item-enter{
+  opacity: 0 !important;
+  height: 0 !important;
+}
+.item-enter-active{
+  transition: all .2s linear !important;
+}
+.item-enter-to{
+  opacity: 1 !important;
+  height: 461px !important;
+}
+
+//显示变为隐藏 leave是废物
+//.item-leave{}
+.item-leave-active{
+  transition: all .2s linear !important;
+}
+.item-leave-to{
+  opacity: 0 !important;
+  height: 0 !important;
+}

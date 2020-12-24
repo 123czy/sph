@@ -1,25 +1,31 @@
 <template>
   <div id="app">
+    <sph-header></sph-header>
     <router-view></router-view>
+    <sph-footer></sph-footer>
   </div>
 </template>
 
 <script>
- 
-
+ import Header from 'components/Header/Header'
+ import Footer from 'components/Footer/Footer'
+import {mapActions} from "vuex";
 export default {
   name: 'App',
- 
+  methods:{
+        ...mapActions(["getCategoryList","getBanners","getFloors"])
+    },
+  components:{
+    "sph-header":Header,
+    "sph-footer":Footer
+  },
+  async created(){
+        await this.getCategoryList()
+        //1
+        await this.getBanners()
+        await this.getFloors()
+    }
 }
 </script>
-
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
