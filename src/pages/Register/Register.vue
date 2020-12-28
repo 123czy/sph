@@ -9,32 +9,36 @@
       </h3>
       <div class="content">
         <label>手机号:</label>
-        <input type="text" placeholder="请输入你的手机号">
-        <span class="error-msg">错误提示信息</span>
+        <input type="text" placeholder="请输入你的手机号" v-model="phone"  name="phone"
+               v-validate="{required: true,regex: /^1[3456789]\d{9}$/}">
+        <span class="error-msg">{{errors.first('phone') }}</span>
       </div>
       <div class="content">
         <label>验证码:</label>
-        <input type="text" placeholder="请输入验证码">
+        <input type="text" placeholder="请输入验证码" v-model="code"   v-validate="{required: true,regex: /^\d{4}$/}" >
         <img ref="code" src="http://182.92.128.115/api/user/passport/code" alt="code">
-        <span class="error-msg">错误提示信息</span>
+        <span class="error-msg"> {{ errors.first('code') }}</span>
       </div>
       <div class="content">
         <label>登录密码:</label>
-        <input type="text" placeholder="请输入你的登录密码">
-        <span class="error-msg">错误提示信息</span>
+        <input type="password" placeholder="请输入你的登录密码" v-model="password"  v-validate="{required: true,regex: /^\d{6,12}$/}">
+        <span class="error-msg">{{errors.first('password') }}</span>
       </div>
       <div class="content">
         <label>确认密码:</label>
-        <input type="text" placeholder="请输入确认密码">
-        <span class="error-msg">错误提示信息</span>
+        <input type="password" placeholder="请输入确认密码"  name="confirmPassword"
+               v-validate="{required: true,is:password}">
+        <span class="error-msg"> {{errors.first('confirmPassword') }}</span>
       </div>
       <div class="controls">
-        <input name="m1" type="checkbox">
+     <input  type="checkbox" name="checked22"
+               v-model="checked"
+               v-validate="{agree:true}" >
         <span>同意协议并注册《尚品汇用户协议》</span>
-        <span class="error-msg">错误提示信息</span>
+        <span class="error-msg"> {{errors.first('checked22')}}</span>
       </div>
       <div class="btn">
-        <button>完成注册</button>
+        <button @click="RegisterFn">完成注册</button>
       </div>
     </div>
 
@@ -58,8 +62,42 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
   export default {
-    name: 'Register'
+    name: 'Register',
+    data(){
+      return {
+        phone:"",
+        code:"",
+        password:"",
+        checked:"false"
+      }
+    },
+   methods:{
+     ...mapActions(["register","codeChange"]),
+      changeCode(){
+        this.$refs.code.src = `http://182.92.128.115/api/user/passport/code?time=${Date.now()}`
+        },
+     
+     async RegisterFn(){
+        const {phone,password,code:registerCode} = this;
+            //code:注册接口返回的状态码
+            const {code,data} = await this.register({phone,password,code:registerCode});
+            if(code === 200){
+                 this.$alert("注册成功;即将跳转到登录页...")
+                // 跳转到登录页
+                this.$router.replace("/Login")
+            }else{ 
+                this.$message({
+                    message:data,
+                    type:"error"
+                })
+                alert("error")
+                this.changeCode()
+                // this.$refs.code.click()
+            }
+     }
+   },
   }
 </script>
 

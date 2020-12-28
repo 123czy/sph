@@ -15,9 +15,10 @@
           mock:resolve('src/mock'),
           pages:resolve('src/pages'),
           common:resolve('src/common'),
-          util:resolve('src/util')
+          util:resolve('src/util'),
+          config:resolve("src/config")
         }
-        }
+      }
     },
      devServer:{
       open:true,

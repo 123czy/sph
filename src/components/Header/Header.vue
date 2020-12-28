@@ -6,14 +6,18 @@
             <div class="container">
                 <div class="loginList">
                     <p>尚品汇欢迎您！</p>
-                    <p>
-                        <span>请</span>
-                        <router-link to="/Login">登录</router-link>
-                        <router-link to="/Register" class="register">免费注册</router-link>
+                    <p v-if="userInfo.name">
+                        <span >{{userInfo.name}}</span>
+                        <a href="javascript:;" @click="logoutFn" v-if="userInfo.name" >登出</a>
+                    </p>
+                    <p v-else>
+                        <router-link   to="/Login" >登录</router-link>
+                        <router-link   to="/Register" class="register">免费注册</router-link>
                     </p>
                 </div>
                 <div class="typeList">
-                    <a href="###">我的订单</a>
+                    <router-link to="/Trade">我的订单</router-link>
+                    <!-- <a href="###">我的订单</a> -->
                     <router-link to="/ShopCart">我的购物车</router-link>
                     <a href="###">我的尚品汇</a>
                     <a href="###">尚品汇会员</a>
@@ -45,16 +49,28 @@
 </template>
 
 <script>
+import {mapState,mapActions} from 'vuex'
 export default {
+    
     name:"sph-header",
     data(){
         return{
             keyword:""
         }
     },
-
-    
+     computed:{
+         ...mapState({
+             userInfo: state=>state.user.userInfo,
+         })
+     }
+    ,
     methods:{
+        ...mapActions(["logout"]),
+        
+        async logoutFn(){
+          await this.logout();
+          this.$router.replace('/Login')
+        },
         toSearch(){
             let localtion = {name:"Search"}
              //要携带上三级分类相关的参数(如果有)
@@ -62,7 +78,6 @@ export default {
                     //代表query有值
                     localtion.query = this.$route.query
                 }
-''
                 //判断keyword有没有值
                 if (this.keyword){
                     localtion.params={

@@ -1,7 +1,7 @@
 <template>
   <div class="swiper-container" ref="swiper">
     <div class="swiper-wrapper">
-      <div class="swiper-slide" v-for="(item,index) in goodsDetail.skuInfo.skuImageList" :key="index">
+      <div class="swiper-slide" v-for="(item,index) in goodsDetail.skuInfo.skuImageList" :key="index.id">
         <img v-if="goodsDetail.skuInfo" :src="item.imgUrl" @click="chooseImg(index)" :class="{active:currentIndex===index}">
       </div>
     </div>

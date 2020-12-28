@@ -13,7 +13,7 @@
       <div class="cart-body" v-for="car in carList" :key="car.skuId">
         <ul class="cart-list">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list"  @change="changeFn(car.skuId,car.isChecked)" :ischecked="car.isChecked === 1">
+            <input type="checkbox" name="chk_list"  @change="changeFn(car.skuId,car.isChecked)" :isChecked="car.isChecked === 1">
           </li>
           <li class="cart-list-con2">
             <img :src="car.imgUrl">
@@ -34,7 +34,7 @@
             <span class="sum">{{car.skuNum *car.skuPrice}}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a href="#none" class="sindelet" @click="delCart(car.skuId)">删除</a>
             <br>
             <a href="#none">移到收藏</a>
           </li>
@@ -43,11 +43,11 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox">
-        <span>全选</span>
+        <input class="chooseAll" type="checkbox"  :disabled="carList.length<=0" v-model="cart_checkedAll">
+        <span >全选</span>
       </div>
       <div class="option">
-        <a href="#none">删除选中的商品</a>
+        <a href="#none" @click="deleteAll">删除选中的商品</a>
         <a href="#none">移到我的关注</a>
         <a href="#none">清除下柜商品</a>
       </div>
@@ -59,7 +59,8 @@
           <i class="summoney">{{cart_priceTotal}}</i>
         </div>
         <div class="sumbtn">
-          <a class="sum-btn" href="###" target="_blank">结算</a>
+          <!-- <a class="sum-btn" href="###" target="_blank" @click="toPay">结算</a> -->
+          <router-link  to="/Trade" class="sum-btn"  >结算</router-link>
         </div>
       </div>
     </div>
@@ -78,10 +79,29 @@ import { mapState,mapActions, mapGetters} from 'vuex'
        carList : state=>state.cart.cartList
      }),
      ...mapGetters(["cart_checkedTotal","cart_priceTotal"]),
+     cart_checkedAll:{
+       get(){
+         return this.$store.getters.cart_checkedAll
+       },
+      async set(val){
+          val = val ? 1 : 0;
+         try {
+                    const codeArr = await this.updateAllChecked(val)
+                    if(codeArr.every(code=>code===200)){
+                        //同步仓库
+                        await this.getCarList()
+                    }else{
+                        alert("全选操作失败")
+                    }
+                }catch (e) {
+                    alert("网络问题")
+                } 
+       }
+     }
    },
   methods:{
     ...mapActions(["getCarList","addSkuToCart",
-    "updateChecked","updateAllChecked"]),
+    "updateChecked","updateAllChecked","delGoodList","checkedAll","delAllGoodList"]),
    async updateCartNum(cartGood,skuNum){
             //skuNum : 代表新增 或 减少的数量
             //商品在购物车中一开始的数量
@@ -92,7 +112,7 @@ import { mapState,mapActions, mapGetters} from 'vuex'
             if(total>0){
                 const code =await this.addSkuToCart({skuid:cartGood.skuId, skuNum})
                 if(code === 200){
-                    await this.getCartList()
+                    await this.getCarList()
                 }else{
                     this.$alert("添加操作失败")
                 }
@@ -100,20 +120,38 @@ import { mapState,mapActions, mapGetters} from 'vuex'
         },
         async changeFn(skuId,isChecked){
             isChecked = isChecked === 0?1:0;
-            try {
            const code = await this.updateChecked({skuId,isChecked});
-               if(code === 200){
+               if(code == 200){
                    //同步仓库
-                   await this.getCartList()
+                   await this.getCarList()
                }else{
-                 console.log(code)
                    alert("选中操作失败")
                }
-           }catch (e) {
-               alert("网络问题")
+        },
+        async delCart(skuid){
+           const code = await this.delGoodList(skuid)  
+           if(code===200){
+             await this.getCarList()
+           }else{
+             this.$alert("删除失败")
            }
-
-        }
+            
+        },
+         async deleteAll(){
+            try {
+                const codeArr = await this.delAllGoodList() 
+                if(codeArr.every(code=>code===200)){
+                    //同步仓库
+                    await this.getCarList()
+                }else{
+                    this.$alert("批量删除操作失败")
+                }
+            }catch (e) {
+                this.$alert("网络问题")
+            }
+        },
+        
+  
   }
   }
 </script>

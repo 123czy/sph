@@ -23,7 +23,9 @@ import "components/components"
 //引入全局的动画less文件
 import "common/css/transition.less"
 
+import "util/element_ui.js"
 
+import "util/vee"
 
 new Vue({
   render: h => h(App),

@@ -13,7 +13,7 @@ import {mapActions} from "vuex";
 export default {
   name: 'App',
   methods:{
-        ...mapActions(["getCategoryList","getBanners","getFloors"])
+        ...mapActions(["getCategoryList","getBanners","getFloors","autoLogin"])
     },
   components:{
     "sph-header":Header,
@@ -24,6 +24,10 @@ export default {
         //1
         await this.getBanners()
         await this.getFloors()
+        
+    },
+  async mounted(){
+       await this.autoLogin()
     }
 }
 </script>

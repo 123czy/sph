@@ -72,7 +72,7 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" v-model="skuNum">
+                <input autocomplete="off" class="itxt"  :value="skuNum" @input="updateSkuNum">
                 <a href="javascript:;" class="plus" @click="skuNum++">+</a>
                 <a href="javascript:;" class="mins" @click="skuNum>1 &&skuNum--">-</a>
               </div>
@@ -345,7 +345,8 @@ import {mapActions,mapGetters,mapState} from "vuex";
            goodsDetail:state =>state.detail.goodsDetail
        }),
        
-       ...mapGetters(["checkedAttrs"])
+       ...mapGetters(["checkedAttrs"]),
+
     },
     methods:{
        ...mapActions(["getDetails","activeFn","addSkuToCart"]),
@@ -360,14 +361,18 @@ import {mapActions,mapGetters,mapState} from "vuex";
                }else{
                    alert("添加购物车失败")
                }
-          //  }catch (e) {
-          //      alert("网络问题....")
-          //  }
+      
+        },
+      
+       async updateSkuNum(ev){
+           let targetVal = ev.target.value;
+            let reg = /\D+/g;
 
-
-        }
+            //控制了输入框中的内容 也完成数据的双向绑定
+            this.skuNum = ev.target.value = targetVal.replace(reg,"")
     },
-    async created(){
+    },
+      async created(){
         await this.getDetails(this.id)
     },
     props:["id"],

@@ -13,3 +13,5 @@ Vue.component(Pagination.name, Pagination);
 
 import OrderButton from "components/OrderButton/OrderButton"
 Vue.component("OrderButton",OrderButton)
+
+

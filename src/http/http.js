@@ -22,9 +22,30 @@ export const addSkuToCart = (skuid,skuNum) => apiAaxios.post(`/cart/addToCart/${
 
 export const carGoodChecked = (skuId,isChecked)=> 
 apiAaxios.get(`/cart/checkCart/${skuId}/${isChecked}`)
+
+export const delGoodList = (skuId)=>apiAaxios.delete(`/cart/deleteCart/${skuId}`)
+
+
+export const login = (phone,password) => apiAaxios.post(`/user/passport/login`,{phone,password})
+
+export const logout = () => apiAaxios.get(`/user/passport/logout`)
    
+export const autoLogout = () => apiAaxios.get(`/user/passport/auth/getUserInfo`)
 
+export const register = (phone,password,code)=> apiAaxios.post(`/user/passport/register`,{phone,password,code})
 
+export const codeChange = ()=> apiAaxios.get(`/user/passport/code`)
+
+export const getTrade = () => apiAaxios.get(`/order/auth/trade`);
+export const getOrders = (page,limit) => apiAaxios.get(`/order/auth/${page}/${limit}`);
+export const getPayInfo = orderId => apiAaxios.get(`/payment/weixin/createNative/${orderId}`);
+export const getPayState = orderId => apiAaxios.get(`/payment/weixin/queryPayStatus/${orderId}`);
+export const submitOrder = (tradeNo,order) => apiAaxios({
+  url:"/order/auth/submitOrder",
+  method:"post",
+  data:order,
+  params:{tradeNo}
+});
 
 
 

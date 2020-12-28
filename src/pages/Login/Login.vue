@@ -17,11 +17,11 @@
             <form action="##">
               <div class="input-text clearFix">
                 <span></span>
-                <input type="text" placeholder="邮箱/用户名/手机号">
+                <input type="text" v-model="phone" placeholder="邮箱/用户名/手机号">
               </div>
               <div class="input-text clearFix">
                 <span class="pwd"></span>
-                <input type="text" placeholder="请输入密码">
+                <input type="text" v-model="password" placeholder="请输入密码">
               </div>
               <div class="setting clearFix">
                 <label class="checkbox inline">
@@ -30,7 +30,7 @@
                 </label>
                 <span class="forget">忘记密码？</span>
               </div>
-              <button class="btn">登&nbsp;&nbsp;录</button>
+              <button class="btn" @click="loginFn">登&nbsp;&nbsp;录</button>
             </form>
 
             <div class="call clearFix">
@@ -66,8 +66,33 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
   export default {
     name: 'Login',
+    data(){
+      return {
+        phone:"",
+        password:""
+      }
+    },
+    methods:{
+       ...mapActions(["login"]),
+     async loginFn(){
+       const {phone, password} = this;
+       const {code,data,message} = await this.login({phone, password}) 
+       if(code === 200){
+         this.$alert("注册成功;即将跳转到登录页...")
+       this.$router.replace('/Home')
+       }else{
+         this.$alert({
+           message:data,
+           type:"error"
+         })
+        //  alert("Error")
+       }
+     
+     }
+    }
   }
 </script>
 

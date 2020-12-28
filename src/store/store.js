@@ -9,6 +9,7 @@ import search from './modules/search';
 import detail from './modules/detail';
 import cart from './modules/cart';
 import user from './modules/user';
+import order from './modules/order';
 Vue.use(Vuex);
  
 export default new Vuex.Store({
@@ -21,6 +22,7 @@ export default new Vuex.Store({
        search,
        detail,
        cart,
-       user
+       user,
+       order
     }
 })
